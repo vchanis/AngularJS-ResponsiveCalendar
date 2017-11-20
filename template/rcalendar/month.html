@@ -31,7 +31,17 @@
                         {{event.endTime|date: 'HH:mm'}}
                     </td>
                     <td ng-if="event.allDay" class="monthview-eventdetail-timecolumn">{{allDayLabel}}</td>
-                    <td class="event-detail" ng-click="eventSelected({event:event})">{{event.title}}</td>
+                    <td class="event-detail" ng-click="eventSelected({event:event})">{{event.title}} 
+                        <span ng-if="!!event.listing">/ Ακίνητο: 
+                            <a href="edit/{{event.listing.ListingCode}}" target="_blank">{{event.listing.ListingCode}}</a>
+                        </span>
+                        <span ng-if="!!event.request">/ Ζήτηση: {{event.request.ID}}</span>
+                        <span ng-if="!!event.customer">/ 
+                            <a href="editCst/{{event.customer.Customerid}}" target="_blank">{{event.customerName}}</a>
+                        </span>
+                        <span ng-if="!!event.agentName && userInfo && userInfo.isAdmin" class="label label-info">{{event.agentName}}</span>
+                        <span ng-if="!!event.done" class="fa fa-check-circle fa-lg text-success" title="{{eventCompleteLabel}}"></span>
+                    </td>
                 </tr>
                 <tr ng-if="!selectedDate.events"><td class="no-event-label">{{noEventsLabel}}</td></tr>
             </table>

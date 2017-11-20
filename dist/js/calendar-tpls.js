@@ -12,10 +12,11 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
         showWeeks: false,
         showEventDetail: true,
         startingDay: 0,
-        allDayLabel: 'all day',
-        noEventsLabel: 'No Events',
+        allDayLabel: 'Όλη μέρα',
+        noEventsLabel: 'Δεν υπάρχουν ενέργειες',
         eventSource: null,
-        queryMode: 'local'
+        queryMode: 'local',
+        eventCompleteLabel: 'Ολοκληρώθηκε'
     })
     .controller('ui.rCalendar.CalendarController', ['$scope', '$attrs', '$parse', '$interpolate', '$log', 'dateFilter', 'calendarConfig', function ($scope, $attrs, $parse, $interpolate, $log, dateFilter, calendarConfig) {
         'use strict';
@@ -24,11 +25,11 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
 
         // Configuration attributes
         angular.forEach(['formatDay', 'formatDayHeader', 'formatDayTitle', 'formatWeekTitle', 'formatMonthTitle', 'formatWeekViewDayHeader', 'formatHourColumn',
-             'allDayLabel', 'noEventsLabel'], function (key, index) {
+             'allDayLabel', 'noEventsLabel', 'eventCompleteLabel'], function (key, index) {
             self[key] = angular.isDefined($attrs[key]) ? $interpolate($attrs[key])($scope.$parent) : calendarConfig[key];
         });
 
-        angular.forEach(['showWeeks', 'showEventDetail', 'startingDay', 'eventSource', 'queryMode'], function (key, index) {
+        angular.forEach(['showWeeks', 'showEventDetail', 'startingDay', 'eventSource', 'queryMode', 'userInfo'], function (key, index) {
             self[key] = angular.isDefined($attrs[key]) ? ($scope.$parent.$eval($attrs[key])) : calendarConfig[key];
         });
 
@@ -246,7 +247,8 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
                 calendarMode: '=',
                 rangeChanged: '&',
                 eventSelected: '&',
-                timeSelected: '&'
+                timeSelected: '&',
+                userInfo: '='
             },
             require: ['calendar', '?^ngModel'],
             controller: 'ui.rCalendar.CalendarController',
@@ -281,6 +283,8 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
                 scope.showEventDetail = ctrl.showEventDetail;
                 scope.noEventsLabel = ctrl.noEventsLabel;
                 scope.allDayLabel = ctrl.allDayLabel;
+                scope.eventCompleteLabel = ctrl.eventCompleteLabel;
+                scope.userInfo = ctrl.userInfo;
 
                 ctrl.mode = {
                     step: {months: 1}
@@ -1153,7 +1157,17 @@ angular.module("template/rcalendar/month.html", []).run(["$templateCache", funct
     "                        {{event.endTime|date: 'HH:mm'}}\n" +
     "                    </td>\n" +
     "                    <td ng-if=\"event.allDay\" class=\"monthview-eventdetail-timecolumn\">{{allDayLabel}}</td>\n" +
-    "                    <td class=\"event-detail\" ng-click=\"eventSelected({event:event})\">{{event.title}}</td>\n" +
+    "                    <td class=\"event-detail\" ng-click=\"eventSelected({event:event})\">{{event.title}} \n" +
+    "                        <span ng-if=\"!!event.listing\">/ Ακίνητο: \n" +
+    "                            <a href=\"edit/{{event.listing.ListingCode}}\" target=\"_blank\">{{event.listing.ListingCode}}</a>\n" +
+    "                        </span>\n" +
+    "                        <span ng-if=\"!!event.request\">/ Ζήτηση: {{event.request.ID}}</span>\n" +
+    "                        <span ng-if=\"!!event.customer\">/ \n" +
+    "                            <a href=\"editCst/{{event.customer.Customerid}}\" target=\"_blank\">{{event.customerName}}</a>\n" +
+    "                        </span>\n" +
+    "                        <span ng-if=\"!!event.agentName && userInfo && userInfo.isAdmin\" class=\"label label-info\">{{event.agentName}}</span>\n" +
+    "                        <span ng-if=\"!!event.done\" class=\"fa fa-check-circle fa-lg text-success\" title=\"{{eventCompleteLabel}}\"></span>\n" +
+    "                    </td>\n" +
     "                </tr>\n" +
     "                <tr ng-if=\"!selectedDate.events\"><td class=\"no-event-label\">{{noEventsLabel}}</td></tr>\n" +
     "            </table>\n" +

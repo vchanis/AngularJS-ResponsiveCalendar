@@ -247,7 +247,8 @@ angular.module('ui.rCalendar', [])
                 rangeChanged: '&',
                 eventSelected: '&',
                 timeSelected: '&',
-                userInfo: '='
+                userInfo: '=',
+                ownerVisible: '&'
             },
             require: ['calendar', '?^ngModel'],
             controller: 'ui.rCalendar.CalendarController',

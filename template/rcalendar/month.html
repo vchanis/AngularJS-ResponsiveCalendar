@@ -39,7 +39,7 @@
                         <span ng-if="!!event.customer">/ 
                             <a href="editCst/{{event.customer.Customerid}}" target="_blank">{{event.customerName}}</a>
                         </span>
-                        <span ng-if="!!event.agentName && userInfo && userInfo.isAdmin" class="label label-info">{{event.agentName}}</span>
+                        <span ng-if="!!event.agentName && ownerVisible()" class="label label-info">{{event.agentName}}</span>
                         <span ng-if="!!event.done" class="fa fa-check-circle fa-lg text-success" title="{{eventCompleteLabel}}"></span>
                     </td>
                 </tr>

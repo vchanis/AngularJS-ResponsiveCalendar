@@ -248,7 +248,8 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
                 rangeChanged: '&',
                 eventSelected: '&',
                 timeSelected: '&',
-                userInfo: '='
+                userInfo: '=',
+                ownerVisible: '&'
             },
             require: ['calendar', '?^ngModel'],
             controller: 'ui.rCalendar.CalendarController',
@@ -1165,7 +1166,7 @@ angular.module("template/rcalendar/month.html", []).run(["$templateCache", funct
     "                        <span ng-if=\"!!event.customer\">/ \n" +
     "                            <a href=\"editCst/{{event.customer.Customerid}}\" target=\"_blank\">{{event.customerName}}</a>\n" +
     "                        </span>\n" +
-    "                        <span ng-if=\"!!event.agentName && userInfo && userInfo.isAdmin\" class=\"label label-info\">{{event.agentName}}</span>\n" +
+    "                        <span ng-if=\"!!event.agentName && ownerVisible()\" class=\"label label-info\">{{event.agentName}}</span>\n" +
     "                        <span ng-if=\"!!event.done\" class=\"fa fa-check-circle fa-lg text-success\" title=\"{{eventCompleteLabel}}\"></span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
